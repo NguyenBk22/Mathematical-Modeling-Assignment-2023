@@ -31,13 +31,13 @@ class comparison:
 
         return grid_graph
 
-    def visualize_grid_graph(self, rows, cols):
+    def visualize_grid_graph(self):
         # Generate a random directed grid graph
         random_directed_grid_graph = generate_random_grid_graph(rows, cols)
 
         # Visualize the directed grid graph
         # Adjust layout for better visualization
-        pos = {node: ((node % cols), -(node // cols))
+        pos = {node: ((node % self.cols), -(node // self.cols))
                for node in random_directed_grid_graph.nodes()}
         options = {
             "font_size": 8,
@@ -55,6 +55,11 @@ class comparison:
         # Show the plot
         plt.show()
 
+    def reshape(self, tuple: (int, int)):
+        self.rows = tuple[0]
+        self.columns = tuple[1]
+        self.graph = self.generate_random_grid_graph(self.rows, self.columns)
+        
     def compare_time_elapsed(self, func1, func2):
         # Create a copy of the graph for each function to ensure fairness in comparison
         graph1 = self.graph.copy()
