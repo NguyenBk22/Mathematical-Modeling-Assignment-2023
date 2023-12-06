@@ -6,7 +6,7 @@ import threading
 import tracemalloc
 
 
-class compare:
+class comparison:
     def __init__(self, rows, columns):
         self.rows = rows
         self.columns = columns
@@ -134,25 +134,4 @@ class compare:
 ----------------------------------------------------------------""")
 
 
-def f(t):
-    # a function that with growing
-    # memory consumption
-    a = [0] * 1000
-    time.sleep(.1)
-    b = a * 100
-    time.sleep(.1)
-    c = b * 100
-    return a
 
-
-def f1(t):
-    d = [1] * 10000
-    time.sleep(1)
-    e = d * 100
-    time.sleep(1)
-    w = e * 100
-    return w
-
-
-t = compare(7, 7)
-t.compare_2_algorithms(f, f1)
