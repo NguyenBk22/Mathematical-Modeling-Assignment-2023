@@ -1,0 +1,4 @@
+gamsapi==45.3.0
+matplotlib==3.8.2
+networkx==3.1
+numpy==1.23.5
