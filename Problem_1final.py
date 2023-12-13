@@ -9,11 +9,11 @@ def generate_random_demand(n):
 def generate_random_data(n, m,MAX_VALUE):
     np.random.seed()
     # Simulate data vector b, l, q, s and matrix A
-    l_arr = np.random.randint(10, 16, size=n)    # Lower bounds for variables y
-    q_arr = np.random.randint(115, 121, size=n)   # Upper bounds for variables y
+    l_arr = np.random.randint(0, 16 ,size=n) # Lower bounds for variables y
+    q_arr = np.random.randint(2*MAX_VALUE, 3*MAX_VALUE, size=n)   # Upper bounds for variables y
     d_arr1 = generate_random_demand(n)              #random D1
     d_arr2 = generate_random_demand(n)              #random D2
-    A = np.random.randint(0, 6, size=(n, m))    # Coefficients matrix
+    A = np.random.randint(0, 7, size=(n, m)) # Coefficients matrix
     b_arr = np.zeros(m, dtype=int)
     s_arr = np.zeros(m, dtype=int)
 
@@ -22,11 +22,10 @@ def generate_random_data(n, m,MAX_VALUE):
 
     return l_arr, q_arr, d_arr1, d_arr2, A, b_arr, s_arr
     
-
-
 def build_MHH(ps,n,M):
     # Create a GAMSPy container
     l_arr, q_arr, d_arr1, d_arr2, A, b_arr, s_arr =generate_random_data(n,M,MAX_VALUE)
+    print("Matrix A : ")
     for row in A:
         print("  ".join(f"{value:4}" for value in row)) 
     print("s:", s_arr)
@@ -35,7 +34,7 @@ def build_MHH(ps,n,M):
     print("b:", b_arr)
     print("d1:", d_arr1)
     print("d2:", d_arr2)
-    print("Matrix A : ")
+    
     
     m = Container(delayed_execution=True)
     
@@ -134,6 +133,7 @@ def main():
 
 if __name__ == "__main__":
     MAX_VALUE=50
+    
     main()
     
     
