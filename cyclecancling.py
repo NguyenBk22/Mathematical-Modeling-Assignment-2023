@@ -118,15 +118,6 @@ cost = np.array([
     [0, 0, 0, 1],
     [0, 0, 0, 0]
 ])
-
-# Tạo ma trận luồng ban đầu
-initial_flow = np.array([
-    [0, 3, 1, 0],
-    [0, 0, 0, 3],
-    [0, 0, 0, 1],
-    [0, 0, 0, 0]
-])
-
 source = 0
 sink = 3
 
