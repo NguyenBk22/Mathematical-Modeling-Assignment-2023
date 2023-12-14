@@ -32,12 +32,12 @@ class comparison:
 
         return grid_graph
 
-    def visualize_grid_graph(self):
-        # Generate a random directed grid graph
-        # Visualize the directed grid graph
+    def visualize_grid_graph(self, graph=None):
+        if graph is None:
+            graph = self.graph
         # Adjust layout for better visualization
         pos = {node: ((node % self.cols), -(node // self.cols))
-               for node in self.graph.nodes()}
+               for node in graph.nodes()}
         options = {
             "font_size": 8,
             "node_size": 200,
@@ -46,11 +46,17 @@ class comparison:
             "linewidths": 1,
             "width": 1,
         }
-        nx.draw(self.graph, pos, with_labels=True, **options)
-        edge_labels = {(u, v): f"({d['capacity']},{d['cost']})" for (
-            u, v, d) in self.graph.edges(data=True)}
+        nx.draw(graph, pos, with_labels=True, **options)
+
+        # Add edge colors based on flow
+        nx.draw(graph, pos, with_labels=True, **options)
+
+        # Draw edge labels with custom positioning
+        edge_labels = {
+            (u, v): f"Cap: {d['capacity']}\nCost: {d['cost']}\nFlow: {d['flow']}" for u, v, d in graph.edges(data=True)}
         nx.draw_networkx_edge_labels(
-            self.graph, pos, edge_labels=edge_labels, font_size=6)
+            graph, pos, edge_labels=edge_labels, font_size=6, label_pos=0.5)
+
         # Show the plot
         plt.show()
 
@@ -67,7 +73,7 @@ class comparison:
             nonlocal graph1
             try:
                 start_time = time.time()
-                func1(graph1)
+                func1(graph1, 0, self.cols)
                 result1.append(time.time() - start_time)
             except Exception as e:
                 print(f"Exception in func1: {e}")
@@ -77,7 +83,7 @@ class comparison:
             nonlocal graph2
             try:
                 start_time = time.time()
-                func2(graph2)
+                func2(graph2, 0, self.cols)
                 result2.append(time.time() - start_time)
             except Exception as e:
                 print(f"Exception in func2: {e}")
@@ -87,7 +93,7 @@ class comparison:
         result1 = []
         result2 = []
         threads = [threading.Thread(target=run_func1, args=(result1,)),
-                threading.Thread(target=run_func2, args=(result2,))]
+                   threading.Thread(target=run_func2, args=(result2,))]
 
         # Start the threads
         for thread in threads:
@@ -107,7 +113,7 @@ class comparison:
             nonlocal graph1
             tracemalloc.clear_traces()
             tracemalloc.start()  # Start tracing memory allocations
-            func1(graph1)
+            func1(graph1, 0, self.cols)
             # Return the peak memory usage
             result1.append(tracemalloc.get_traced_memory()[1])
             tracemalloc.reset_peak()  # Stop tracing memory allocations
@@ -116,7 +122,7 @@ class comparison:
             nonlocal graph2
             tracemalloc.clear_traces()
             tracemalloc.start()
-            func2(graph2)
+            func2(graph2, 0, self.cols)
             # Return the peak memory usage
             result2.append(tracemalloc.get_traced_memory()[1])
             tracemalloc.reset_peak()
@@ -145,3 +151,22 @@ class comparison:
     Time Elapsed:   {t1 * 1000:.2f} ms            {t2 * 1000:.2f} ms
     Memory Usage:   {m1 / 1024:.2f} KB            {m2 / 1024:.2f} KB
 ----------------------------------------------------------------""")
+
+    def execute(self, alt):
+        return alt(self.graph.copy(), 0, self.cols)
+
+    def time_elapsed(self, alt):
+        res = []
+        graph = self.graph
+        def run_func(result):
+            nonlocal graph
+            try:
+                start_time = time.time()
+                alt(graph, 0, self.cols)
+                result.append(time.time() - start_time)
+            except Exception as e:
+                print(f"Exception in func1: {e}")
+                result.append(None)
+        run_func(res)
+        return res
+    

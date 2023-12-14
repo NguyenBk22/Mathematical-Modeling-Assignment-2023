@@ -1,5 +1,5 @@
-import networkx as nx
-import matplotlib.pyplot as plt
+
+
 
 def bellman_ford(start, n, flow, capacity, costo):
     distance = [float('inf')] * n
@@ -7,19 +7,21 @@ def bellman_ford(start, n, flow, capacity, costo):
     parent = [-1] * n
     for _ in range(n):
         for u in range(n):
-            for v in range(n):            
+            for v in range(n):
                 if flow[u][v] < capacity[u][v]:
                     if distance[u] + costo[u][v] < distance[v]:
                         distance[v] = distance[u] + costo[u][v]
                         parent[v] = u
-                    
+
     return distance, parent
-#distance dùng để tìm chi phí nhỏ nhất ( tính theo costo ), parent mảng chứa đỉnh cha của các đỉnh
+# distance dùng để tìm chi phí nhỏ nhất ( tính theo costo ), parent mảng chứa đỉnh cha của các đỉnh
+
+
 def successive_shortest_path(capacity, start, destination, costo):
     n = len(capacity)
     flow = [[0] * n for _ in range(n)]
     while True:
-        # sau mỗi lần lặp sẽ cập nhận flow 
+        # sau mỗi lần lặp sẽ cập nhận flow
         # flow là giá trị các ống mà luồng thứu nhất đi qua
         distance, parent = bellman_ford(start, n, flow, capacity, costo)
         if distance[destination] == float('inf'):
@@ -47,6 +49,7 @@ def successive_shortest_path(capacity, start, destination, costo):
             min_costo += flow[u][v] * costo[u][v]
 
     return min_costo, flow
+
 
 # Esempio sử dụng
 capacity = [
