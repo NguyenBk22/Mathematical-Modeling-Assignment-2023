@@ -1,6 +1,7 @@
 import numpy as np
 import networkx as nx
-import random
+
+dimport random
 
 def randomized_initial_flow(graph, source, sink):
     num_nodes = graph.number_of_nodes()

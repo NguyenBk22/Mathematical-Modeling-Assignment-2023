@@ -1,7 +1,7 @@
 import networkx as nx
+import random
 
-
-def successive_shortest_path(graph, start, destination):
+def successive_shortest_path(graph, start=0):
     def bellman_ford(start, n, flow, graph):
         distance = [float('inf')] * n
         distance[start] = 0
@@ -17,11 +17,10 @@ def successive_shortest_path(graph, start, destination):
                                 parent[v] = u
 
         return distance, parent
-    
-    n = len(graph.nodes)
-    
-    flow = [[0] * n for _ in range(n)]
 
+    n = len(graph.nodes)
+    destination = n - 1
+    flow = [[0] * n for _ in range(n)]
     while True:
         distance, parent = bellman_ford(start, n, flow, graph)
         if distance[destination] == float('inf'):
@@ -47,6 +46,7 @@ def successive_shortest_path(graph, start, destination):
     for u, v, data in graph.edges(data=True):
         data['flow'] = flow[u][v]
 
-    min_cost = sum(flow[u][v] * data['cost'] for u, v, data in graph.edges(data=True))
+    min_cost = sum(flow[u][v] * data['cost']
+                   for u, v, data in graph.edges(data=True))
 
     return min_cost, graph

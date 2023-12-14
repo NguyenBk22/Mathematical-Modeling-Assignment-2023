@@ -153,7 +153,7 @@ class comparison:
 ----------------------------------------------------------------""")
 
     def execute(self, alt):
-        return alt(self.graph.copy(), 0, self.cols)
+        return alt(self.graph.copy())
 
     def time_elapsed(self, alt):
         res = []
