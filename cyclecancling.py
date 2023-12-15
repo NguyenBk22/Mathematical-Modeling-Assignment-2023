@@ -108,14 +108,18 @@ def cycle_cancelling(graph):
 
     min_cost = float('inf')
     final_flow = np.zeros((len(graph.nodes),len(graph.nodes)))
+    sum_flow = 0 #add
     for i in range(len(list_initial_flow)):
         graph_temp = graph.copy()
         final_flow_tp = sub_cycle_cancelling(graph_temp, list_initial_flow[i])
         minc = 0
+         sum_flow_tp = 0  #add
         for u, v in graph.edges():
             minc += final_flow_tp[u][v] * graph[u][v]['cost']
-        if minc < min_cost:
+             sum_flow_tp += final_flow_tp[u][v] #add
+        if minc < min_cost and sum_flow_tp >= sum_flow: #add
             min_cost = minc
+            sum_flow = sum_flow_tp #add
             final_flow = final_flow_tp
 
         for u, v, data in graph.edges(data=True):
