@@ -117,10 +117,15 @@ def cycle_cancelling(graph):
         for u, v in graph.edges():
             minc += final_flow_tp[u][v] * graph[u][v]['cost']
              sum_flow_tp += final_flow_tp[u][v] #add
-        if minc < min_cost and sum_flow_tp >= sum_flow: #add
-            min_cost = minc
-            sum_flow = sum_flow_tp #add
+            #sửa điều kiện chỗ này
+         if sum_flow_tp > sum_flow:
+            sum_flow = sum_flow_tp
             final_flow = final_flow_tp
+            min_cost = minc
+        elif sum_flow_tp == sum_flow:
+            if minc < min_cost:
+                final_flow = final_flow_tp
+                min_cost = minc
 
         for u, v, data in graph.edges(data=True):
             data['flow'] = int(final_flow[u][v])
