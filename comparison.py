@@ -73,7 +73,7 @@ class comparison:
             nonlocal graph1
             try:
                 start_time = time.time()
-                func1(graph1, 0, self.cols)
+                func1(graph1)
                 result1.append(time.time() - start_time)
             except Exception as e:
                 print(f"Exception in func1: {e}")
@@ -83,7 +83,7 @@ class comparison:
             nonlocal graph2
             try:
                 start_time = time.time()
-                func2(graph2, 0, self.cols)
+                func2(graph2)
                 result2.append(time.time() - start_time)
             except Exception as e:
                 print(f"Exception in func2: {e}")
@@ -113,19 +113,19 @@ class comparison:
             nonlocal graph1
             tracemalloc.clear_traces()
             tracemalloc.start()  # Start tracing memory allocations
-            func1(graph1, 0, self.cols)
+            func1(graph1)
             # Return the peak memory usage
             result1.append(tracemalloc.get_traced_memory()[1])
-            tracemalloc.reset_peak()  # Stop tracing memory allocations
+            # tracemalloc.reset_peak()  # Stop tracing memory allocations
 
         def run_func2(result2):
             nonlocal graph2
             tracemalloc.clear_traces()
             tracemalloc.start()
-            func2(graph2, 0, self.cols)
+            func2(graph2)
             # Return the peak memory usage
             result2.append(tracemalloc.get_traced_memory()[1])
-            tracemalloc.reset_peak()
+            # tracemalloc.reset_peak()
 
         result1 = []
         result2 = []
@@ -153,20 +153,20 @@ class comparison:
 ----------------------------------------------------------------""")
 
     def execute(self, alt):
-        return alt(self.graph.copy(), 0, self.cols)
+        return alt(self.graph.copy())
 
     def time_elapsed(self, alt):
         res = []
         graph = self.graph
+
         def run_func(result):
             nonlocal graph
             try:
                 start_time = time.time()
-                alt(graph, 0, self.cols)
+                alt(graph)
                 result.append(time.time() - start_time)
             except Exception as e:
                 print(f"Exception in func1: {e}")
                 result.append(None)
         run_func(res)
-        return res
-    
+        return res[0]
